@@ -1,0 +1,19 @@
+
+{
+  "glyphs": {
+    "C": {
+      "ha": 724,
+      "x_min": 52,
+      "x_max": 701,
+      "o": "m 417 -23 q -127 0 -219.5 91 q -92.5 91 -92.5 217 v 6 q 0 94 39 170.5 q 39 76.5 108.5 121.5 q 69.5 45 158.5 45 q 112 0 187.5 -70.5 q 75.5 -70.5 92.5 -193.5 h -131 q -17 70 -56.5 106.5 q -39.5 36.5 -97.5 36.5 q -78 0 -123 -58 q -45 -58 -45 -163 v -7 q 0 -104 45 -161.5 q 45 -57.5 125 -57.5 q 59 0 100 34 q 41 34 56 99 h 130 q -17 -111 -93 -173 q -76 -62 -185 -62 z "
+    }
+  },
+  "familyName": "Inter",
+  "ascender": 1000,
+  "descender": -200,
+  "underlinePosition": -100,
+  "underlineThickness": 50,
+  "boundingBox": { "yMin": -200, "xMin": -150, "yMax": 1000, "xMax": 1000 },
+  "resolution": 1000,
+  "original_font_information": { "format": 0, "copyright": "Copyright © 2023 Inter Font Project", "fontFamily": "Inter", "fontSubfamily": "Regular", "uniqueID": "Inter Regular", "fullName": "Inter Regular", "version": "Version 1.000", "postScriptName": "Inter-Regular" }
+}

@@ -1,10 +1,10 @@
-
 import { useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Cpu, Brush, Globe, Code, Zap, BarChart, ChevronDown } from 'lucide-react';
 
 import Navbar from '@/components/Navbar';
 import ThreeDCube from '@/components/ThreeDCube';
+import ProductShowcase3D from '@/components/ProductShowcase3D';
 import ServiceCard from '@/components/ServiceCard';
 import PricingCard from '@/components/PricingCard';
 import TestimonialCard from '@/components/TestimonialCard';
@@ -266,6 +266,84 @@ const Index = () => {
                 </div>
               </div>
             </motion.div>
+          </div>
+        </div>
+      </section>
+      
+      {/* New 3D Product Showcase Section */}
+      <section className="py-20 md:py-32 relative overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-20 left-20 w-96 h-96 bg-cartly-blue/20 rounded-full filter blur-3xl"></div>
+          <div className="absolute bottom-20 right-20 w-80 h-80 bg-cartly-purple/20 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-16">
+            <motion.h2 
+              className="section-heading"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Digital <span className="text-gradient">Transformation</span>
+            </motion.h2>
+            <motion.p 
+              className="section-subheading"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              We build innovative digital solutions that help businesses thrive in the modern age.
+            </motion.p>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <ProductShowcase3D />
+            </div>
+            
+            <div className="order-1 lg:order-2">
+              <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.6 }}
+                viewport={{ once: true }}
+              >
+                <h3 className="text-3xl font-display font-bold mb-6">
+                  Turn Your Vision Into <span className="text-gradient">Reality</span>
+                </h3>
+                <p className="text-lg text-muted-foreground mb-6">
+                  Our team of experts will work with you to craft a digital solution that meets your unique business needs and exceeds your expectations.
+                </p>
+                
+                <ul className="space-y-4 mb-8">
+                  {[
+                    "Custom web applications that scale with your business",
+                    "Beautiful, intuitive user interfaces designed for conversion",
+                    "Advanced 3D and interactive elements for unforgettable experiences",
+                    "Optimized performance across all devices and platforms"
+                  ].map((item, i) => (
+                    <motion.li 
+                      key={i}
+                      className="flex items-start gap-3"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: i * 0.1 }}
+                      viewport={{ once: true }}
+                    >
+                      <Zap className="text-primary shrink-0 mt-1" size={18} />
+                      <span>{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+                
+                <a href="#contact" className="btn-primary">
+                  Start Your Project
+                </a>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
