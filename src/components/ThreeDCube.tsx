@@ -1,28 +1,14 @@
 
-import { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshDistortMaterial, Instances, Instance, OrbitControls } from '@react-three/drei';
-import { Color, Vector3 } from 'three';
+import { useRef, useState, useEffect, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
+import { MeshDistortMaterial, OrbitControls } from '@react-three/drei';
+import { Color } from 'three';
 
 function DistortedCube({ isMobile }: { isMobile: boolean }) {
   const meshRef = useRef<any>();
   const [hovered, setHovered] = useState(false);
   const [clicked, setClicked] = useState(false);
   
-  useFrame((state) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = meshRef.current.rotation.y += 0.001;
-      if (hovered && !clicked) {
-        meshRef.current.rotation.y += 0.01;
-        meshRef.current.rotation.x += 0.01;
-      }
-      if (clicked) {
-        meshRef.current.rotation.y += 0.02;
-        meshRef.current.rotation.x -= 0.02;
-      }
-    }
-  });
-
   return (
     <mesh
       ref={meshRef}
@@ -30,6 +16,7 @@ function DistortedCube({ isMobile }: { isMobile: boolean }) {
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
       onClick={() => setClicked(!clicked)}
+      rotation={[0.5, 0.5, 0]}
     >
       <icosahedronGeometry args={[1, 1]} />
       <MeshDistortMaterial
@@ -43,65 +30,19 @@ function DistortedCube({ isMobile }: { isMobile: boolean }) {
   );
 }
 
-function FloatingParticles() {
-  return (
-    <Instances limit={100}>
-      <sphereGeometry args={[0.05, 16, 16]} />
-      <meshStandardMaterial color="#9b87f5" />
-      
-      <ParticleGroup count={50} />
-    </Instances>
-  );
-}
-
-function ParticleGroup({ count }: { count: number }) {
-  const particles = useRef<any[]>([]);
-  const velocities = useRef<Vector3[]>([]);
-  
-  useEffect(() => {
-    // Initialize velocities
-    for (let i = 0; i < count; i++) {
-      velocities.current.push(
-        new Vector3(
-          (Math.random() - 0.5) * 0.005,
-          (Math.random() - 0.5) * 0.005,
-          (Math.random() - 0.5) * 0.005
-        )
-      );
-    }
-  }, [count]);
-  
-  useFrame(() => {
-    for (let i = 0; i < particles.current.length; i++) {
-      const particle = particles.current[i];
-      if (particle) {
-        // Move particle
-        particle.position.x += velocities.current[i].x;
-        particle.position.y += velocities.current[i].y;
-        particle.position.z += velocities.current[i].z;
-        
-        // Boundary check
-        const limit = 3;
-        if (Math.abs(particle.position.x) > limit) velocities.current[i].x *= -1;
-        if (Math.abs(particle.position.y) > limit) velocities.current[i].y *= -1;
-        if (Math.abs(particle.position.z) > limit) velocities.current[i].z *= -1;
-      }
-    }
-  });
-  
+// Simpler particles that won't cause performance issues
+function SimpleParticles({ count = 20 }: { count?: number }) {
   return (
     <>
       {Array.from({ length: count }).map((_, i) => (
-        <Instance 
-          key={i}
-          ref={(el) => (particles.current[i] = el)}
-          position={[
-            (Math.random() - 0.5) * 5,
-            (Math.random() - 0.5) * 5,
-            (Math.random() - 0.5) * 5
-          ]}
-          scale={Math.random() * 0.5 + 0.5}
-        />
+        <mesh key={i} position={[
+          (Math.random() - 0.5) * 5,
+          (Math.random() - 0.5) * 5,
+          (Math.random() - 0.5) * 5
+        ]}>
+          <sphereGeometry args={[0.05, 8, 8]} />
+          <meshStandardMaterial color="#9b87f5" />
+        </mesh>
       ))}
     </>
   );
@@ -122,19 +63,20 @@ export default function ThreeDCube({ className }: { className?: string }) {
   
   return (
     <div className={`w-full h-full ${className}`}>
-      <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-        <pointLight position={[-10, -10, -10]} />
-        <DistortedCube isMobile={isMobile} />
-        <FloatingParticles />
-        <OrbitControls 
-          enableZoom={false} 
-          enablePan={false} 
-          maxPolarAngle={Math.PI / 1.75}
-          minPolarAngle={Math.PI / 2.5}
-        />
-      </Canvas>
+      <Suspense fallback={<div className="flex items-center justify-center h-full">Loading 3D effects...</div>}>
+        <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+          <ambientLight intensity={0.5} />
+          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
+          <DistortedCube isMobile={isMobile} />
+          <SimpleParticles />
+          <OrbitControls 
+            enableZoom={false} 
+            enablePan={false} 
+            maxPolarAngle={Math.PI / 1.75}
+            minPolarAngle={Math.PI / 2.5}
+          />
+        </Canvas>
+      </Suspense>
     </div>
   );
 }
